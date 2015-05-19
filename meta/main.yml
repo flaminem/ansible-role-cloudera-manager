@@ -1,0 +1,14 @@
+---
+galaxy_info:
+  author: Furcy Pin
+  description: Cloudera-Manager CDH5 installer
+  company: Flaminem
+  license: MIT
+  min_ansible_version: 1.4
+  platforms:
+  - name: Ubuntu
+    versions:
+    - trusty
+  categories:
+  - hadoop
+dependencies: []

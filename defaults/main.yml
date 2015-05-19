@@ -1,0 +1,8 @@
+---
+
+
+cloudera_manager_major_version: cm5
+
+cloudera_manager_use_embedded_database: true
+
+

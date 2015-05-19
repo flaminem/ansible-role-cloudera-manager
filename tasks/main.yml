@@ -1,0 +1,32 @@
+---
+- name: Ensure cloudera-manager repo is present
+  apt_repository: repo='{{item}} http://archive.cloudera.com/{{ cloudera_manager_major_version }}/{{ ansible_distribution|lower }}/{{ansible_distribution_release}}/amd64/cm {{ansible_distribution_release}}-{{ cloudera_manager_major_version }} contrib' state=present
+  with_items: 
+    - deb [arch=amd64]
+    - deb-src
+  tags: [cloudera-manager]
+- name: Ensure cloudera PGP key is present
+  apt_key: keyserver=keyserver.ubuntu.com id=327574EE02A818DD state=present
+  tags: [cloudera-manager]
+- name: Ensure apt cache is up to date
+  apt: cache_valid_time=3600 update_cache=yes
+  tags: [cloudera-manager]
+- name: Ensure packages are installed
+  apt: pkg={{ item }} state=installed force=yes
+  with_items:
+    - cloudera-manager-daemons 
+    - cloudera-manager-server 
+  tags: [packages, cloudera-manager]
+- name: Ensure embedded database is installed
+  apt: pkg=cloudera-manager-server-db-2 state=installed force=yes
+  when: cloudera_manager_use_embedded_database
+  tags: [packages, cloudera-manager]
+- name: Ensure embedded database is started
+  command: sudo service cloudera-scm-server-db start
+  when: cloudera_manager_use_embedded_database
+  tags: [packages, cloudera-manager]
+- name: Ensure cloudera manager is started
+  command: sudo service cloudera-scm-server start
+  tags: [packages, cloudera-manager]
+
+
